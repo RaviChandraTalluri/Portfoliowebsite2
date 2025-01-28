@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio | Lakshmi Ravi Chandra Talluri</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; }
+    .hero-section {
+      background: url('https://media.istockphoto.com/id/1337668467/vector/modern-rainbow-glow-backlight-frame.jpg?s=612x612&w=0&k=20&c=xbuNlYJsMRHstRLRkJyAW_eDaYLE6sXjQoFFo1tmFSo=') center/cover no-repeat;
+      color: #ffffff;
+      padding: 8rem 2rem;
+      text-align: center;
+      position: relative;
+    }
+    .hero-section .logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 80px;
+    }
+    .hero-section h1, .hero-section p {
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    }
+    .hero-section h1 {
+      margin-top: 100px;
+    }
+    .section {
+      padding: 4rem 1rem;
+      background: #f8f8f8;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .section-header h2 {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    .card {
+      background: white;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.4s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+    .card img {
+      width: 100%;
+      height: auto;
+    }
+    .contact-form {
+      background: #f9f9f9;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .cta-button {
+      background-color: rgba(255, 255, 255, 0.8);
+      color: #000;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .cta-button:hover {
+      background-color: #fff;
+      color: #3498db;
+    }
+    .skill-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      margin: 1rem 0;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+    .skill-item:hover {
+      transform: translateY(-5px);
+      background-color: #f0f8ff;
+    }
+    .skill-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+    .skill-bar {
+      width: 50%;
+      height: 8px;
+      background: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .skill-bar span {
+      display: block;
+      height: 100%;
+      background: #3498db;
+      width: 0%;
+      border-radius: 4px;
+      transition: width 1s ease;
+    }
+    .skill-item:hover .skill-bar span {
+      width: 100%;
+    }
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      z-index: 1000;
+      transition: background-color 0.3s ease;
+    }
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin: 0 1rem;
+      transition: color 0.3s ease;
+    }
+    .navbar a:hover {
+      color: #3498db;
+    }
+    .cta-button, .navbar a {
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .cta-button:hover, .navbar a:hover {
+      background-color: #2980b9;
+      transform: translateY(-2px);
+    }
+    .cta-button {
+      display: inline-block;
+      text-align: center;
+    }
+    .content {
+      padding-top: 80px;
+    }
+    @media (min-width: 768px) {
+      .section-header h2 {
+        font-size: 2.5rem;
+      }
+      .hero-section {
+        padding: 10rem 4rem;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="logo">
+      <a href="#"><img src="images/logo.png" alt="Logo" class="logo"></a>
+    </div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#certifications">Certifications</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <div class="content">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <img src="images/logo.png" alt="Logo" class="logo">
+      <h1 class="text-6xl font-extrabold">Lakshmi Ravi Chandra Talluri</h1>
+      <p class="mt-4 text-xl font-light">Data Engineer | Analyst | Databricks Certified</p>
+      <p class="mt-2 text-lg max-w-2xl mx-auto">Expert in designing, building, and optimizing scalable data pipelines and real-time processing systems. Passionate about leveraging data for operational excellence.</p>
+      <a href="#contact" class="cta-button mt-6">Get in Touch</a>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+      <div class="section-header">
+        <h2>About Me</h2>
+      </div>
+      <p class="text-center max-w-4xl mx-auto">I am a skilled Data Engineer with hands-on experience in real-time data pipelines, big data technologies, and cloud platforms. With a strong academic background, I excel at creating data-driven solutions to complex challenges. My certifications and expertise in Databricks, Apache Spark, and Confluent Kafka demonstrate my ability to handle data at scale.</p>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+      <div class="section-header">
+        <h2>Skills</h2>
+      </div>
+      <div class="container mx-auto">
+        <div class="skill-item">
+          <span class="skill-title"><i class="fas fa-code"></i> Python</span>
+          <div class="skill-bar"><span style="width: 90%;"></span></div>
+        </div>
+        <div class="skill-item">
+          <span class="skill-title"><i class="fas fa-database"></i> SQL</span>
+          <div class="skill-bar"><span style="width: 85%;"></span></div>
+        </div>
+        <div class="skill-item">
+          <span class="skill-title"><i class="fas fa-chart-bar"></i> Apache Spark</span>
+          <div class="skill-bar"><span style="width: 80%;"></span></div>
+        </div>
+        <div class="skill-item">
+          <span class="skill-title"><i class="fas fa-chart-pie"></i> Tableau</span>
+          <div class="skill-bar"><span style="width: 75%;"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+      <div class="section-header">
+        <h2>Projects</h2>
+      </div>
+      <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="card p-6">
+          <img src="https://files.oaiusercontent.com/file-PBEGe6FGubaDsqQLsrQQE1?se=2025-01-28T23%3A39%3A05Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D5dca20a0-94e9-42d0-a11e-4ce0d6731a2c.webp&sig=YMvAjlYBeVm0fLxABJ8PmspI6vyo0sfKZcdsuXSH9O0%3D" alt="Real-Time Data Pipelines" class="w-full h-48 object-cover">
+          <h3 class="text-xl font-bold mt-4">Real-Time Data Pipelines</h3>
+          <p class="text-gray-600 mt-2">Developed real-time data pipelines in Databricks to handle high-velocity data streams efficiently.</p>
+        </div>
+        <div class="card p-6">
+          <img src="https://files.oaiusercontent.com/file-AQTtwyzsfEgkrmjyL7Lm7f?se=2025-01-28T22%3A37%3A38Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3Df006e271-679a-4b68-aae8-631498b29459.webp&sig=k/dvyXdqQgnYL2bA/ERe9y4DndFUueZRd1EeEdhCMjE%3D" alt="Customer Satisfaction Analysis" class="w-full h-48 object-cover">
+          <h3 class="text-xl font-bold mt-4">Customer Satisfaction Analysis</h3>
+          <p class="text-gray-600 mt-2">Built machine learning models to analyze customer satisfaction and improve retention strategies.</p>
+        </div>
+        <div class="card p-6">
+          <img src="https://files.oaiusercontent.com/file-MTSp9RvE4JzhEbUXiV6UVb?se=2025-01-28T22%3A37%3A52Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D5d61fe28-dd41-45b7-a325-e3510e7ea7cc.webp&sig=PJ7pkyUuDN1m1xzDITU8t83TEQOw735YmiklfoUVa9A%3D" alt="Demand Forecasting System" class="w-full h-48 object-cover">
+          <h3 class="text-xl font-bold mt-4">Demand Forecasting System</h3>
+          <p class="text-gray-600 mt-2">Implemented ARIMA models to predict inventory requirements, reducing stockouts by 30%.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section">
+      <div class="section-header">
+        <h2>Experience</h2>
+      </div>
+      <div class="container mx-auto space-y-6">
+        <div class="card p-6">
+          <h3 class="text-xl font-bold">Data Engineer, Alephys</h3>
+          <p class="text-sm text-gray-500">July 2024 - Present | Houston, Texas</p>
+          <ul class="list-disc ml-4 mt-2 text-gray-600">
+            <li>Developed real-time data pipelines using Databricks and Delta Live Tables.</li>
+            <li>Optimized performance with partitioning, indexing, and caching for large datasets.</li>
+            <li>Integrated Confluent Kafka with Databricks for real-time streaming.</li>
+          </ul>
+        </div>
+        <div class="card p-6">
+          <h3 class="text-xl font-bold">Data Engineer Intern, Nuor</h3>
+          <p class="text-sm text-gray-500">April 2021 - June 2021 | Hyderabad, India</p>
+          <ul class="list-disc ml-4 mt-2 text-gray-600">
+            <li>Developed data pipelines in Databricks for ETL processes.</li>
+            <li>Led Cloudera Manager installation and Hadoop migration projects.</li>
+            <li>Built Tableau dashboards using advanced analytics techniques.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications" class="section">
+      <div class="section-header">
+        <h2>Certifications</h2>
+      </div>
+      <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="card p-6">
+          <img src="https://files.oaiusercontent.com/file-JkbPohiJQ3X7wytfJD21oU?se=2025-01-28T23%3A44%3A03Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D299%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3DDatabricks%2520Badge.png&sig=EsezdsB3SDzz/FQyugCWVZQFqxV925Hjis2OeBhlVBU%3D" alt="Databricks Certified Badge" class="w-full h-32 object-contain">
+          <h3 class="text-xl font-bold mt-4">Databricks Certified Data Engineer Professional</h3>
+          <p class="text-gray-600">Valid: Sep 2024 - Sep 2026</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section bg-white">
+      <div class="section-header">
+        <h2>Contact Me</h2>
+      </div>
+      <div class="max-w-lg mx-auto mt-8">
+        <form action="#" method="POST" class="contact-form">
+          <input type="text" name="name" placeholder="Your Name" class="w-full p-3 border rounded mb-4">
+          <input type="email" name="email" placeholder="Your Email" class="w-full p-3 border rounded mb-4">
+          <textarea name="message" placeholder="Your Message" class="w-full p-3 border rounded mb-4"></textarea>
+          <button type="submit" class="cta-button w-full">Send Message</button>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-black text-white text-center py-6">
+    <p>&copy; 2025 Lakshmi Ravi Chandra Talluri. All rights reserved.</p>
+  </footer>
+</body>
+</html>

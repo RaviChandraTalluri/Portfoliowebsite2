@@ -8,115 +8,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', sans-serif; }
-    .hero-section {
-      background: url('https://media.istockphoto.com/id/1337668467/vector/modern-rainbow-glow-backlight-frame.jpg?s=612x612&w=0&k=20&c=xbuNlYJsMRHstRLRkJyAW_eDaYLE6sXjQoFFo1tmFSo=') center/cover no-repeat;
-      color: #ffffff;
-      padding: 8rem 2rem;
-      text-align: center;
-      position: relative;
+    html, body {
+      height: 100%; /* Ensure full height */
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #f8f8f8;
     }
-    .hero-section .logo {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      width: 60px;
-      max-width: 100px;
-    }
-    .hero-section h1, .hero-section p {
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    }
-    .hero-section h1 {
-      margin-top: 100px;
-    }
-    .section {
-      padding: 4rem 1rem;
-      background: #f8f8f8;
-    }
-    .section-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    .section-header h2 {
-      font-size: 2rem;
-      font-weight: bold;
-      color: #2c3e50;
-    }
-    .card {
-      background: white;
-      border-radius: 1rem;
-      overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      transition: transform 0.4s ease-in-out;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .card:hover {
-      transform: scale(1.05);
-    }
-    .card img {
-      width: 100%;
-      height: auto;
-    }
-    .contact-form {
-      background: #f9f9f9;
-      border-radius: 1rem;
-      padding: 2rem;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-    .cta-button {
-      background-color: rgba(255, 255, 255, 0.8);
-      color: #000;
-      padding: 0.75rem 1.5rem;
-      border-radius: 9999px;
-      font-size: 1rem;
-      font-weight: bold;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    .cta-button:hover {
-      background-color: #fff;
-      color: #3498db;
-    }
-    .skill-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      margin: 1rem 0;
-      transition: transform 0.3s, background-color 0.3s;
-    }
-    .skill-item:hover {
-      transform: translateY(-5px);
-      background-color: #f0f8ff;
-    }
-    .skill-title {
-      font-size: 1.25rem;
-      font-weight: bold;
-    }
-    .skill-bar {
-      width: 50%;
-      height: 8px;
-      background: #e0e0e0;
-      border-radius: 4px;
-      overflow: hidden;
-      position: relative;
-    }
-    .skill-bar span {
-      display: block;
-      height: 100%;
-      background: #3498db;
-      width: 0%;
-      border-radius: 4px;
-      transition: width 1s ease;
-    }
-    .skill-item:hover .skill-bar span {
-      width: 100%;
-    }
+    .container { max-width: 1200px; margin: 2rem auto; padding: 1rem; }
     .navbar {
       position: fixed;
       top: 0;
@@ -140,19 +39,99 @@
     .navbar a:hover {
       color: #3498db;
     }
-    .cta-button, .navbar a {
-      transition: background-color 0.3s ease, transform 0.3s ease;
+    .content {
+      padding-top: 80px; /* Adjust for navbar height */
     }
-    .cta-button:hover, .navbar a:hover {
-      background-color: #2980b9;
-      transform: translateY(-2px);
-    }
-    .cta-button {
-      display: inline-block;
+    .hero-section {
+      background: url('https://media.istockphoto.com/id/1337668467/vector/modern-rainbow-glow-backlight-frame.jpg?s=612x612&w=0&k=20&c=xbuNlYJsMRHstRLRkJyAW_eDaYLE6sXjQoFFo1tmFSo=') center/cover no-repeat;
+      color: #ffffff;
+      padding: 8rem 2rem;
       text-align: center;
     }
-    .content {
-      padding-top: 80px;
+    .section {
+      padding: 4rem 1rem;
+      background: #f8f8f8;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .section-header h2 {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    .experience-item {
+      margin-bottom: 2rem;
+    }
+    .experience-item h3 {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    .experience-item p {
+      margin: 0.5rem 0;
+      color: #555;
+    }
+    .experience-item ul {
+      list-style-type: disc;
+      margin-left: 1.5rem;
+      color: #555;
+    }
+    .skill-item, .project-card, .card {
+      background: white;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.4s ease-in-out;
+      margin: 0.5rem 0;
+    }
+    .skill-item:hover, .project-card:hover, .card:hover {
+      transform: scale(1.05);
+    }
+    .skill-title, .project-card h3 {
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+    .skill-bar {
+      width: 50%;
+      height: 8px;
+      background: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .skill-bar span {
+      display: block;
+      height: 100%;
+      background: #3498db;
+      width: 0%;
+      border-radius: 4px;
+      transition: width 1s ease;
+    }
+    .skill-item:hover .skill-bar span {
+      width: 100%;
+    }
+    .project-card img, .card img {
+      width: 100%;
+      height: auto;
+      transition: opacity 0.4s ease-in-out;
+    }
+    .project-card:hover img, .card:hover img {
+      opacity: 0.9;
+    }
+    .cta-button {
+      background-color: rgba(255, 255, 255, 0.8);
+      color: #000;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .cta-button:hover {
+      background-color: #fff;
+      color: #3498db;
     }
     .navbar .logo img {
       width: 60px;
@@ -166,32 +145,80 @@
         padding: 10rem 4rem;
       }
     }
+    .project-card {
+      background: white;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+    }
+    .project-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+    .project-card h3 {
+      transition: color 0.4s ease-in-out;
+    }
+    .project-card:hover h3 {
+      color: #3498db;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0,0,0);
+      background-color: rgba(0,0,0,0.4);
+      padding-top: 60px;
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 8px;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
   </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body>
   <!-- Navigation Bar -->
   <nav class="navbar">
     <div class="logo">
-      <a href="#"><img src="https://raw.githubusercontent.com/RaviChandraTalluri/Portfoliowebsite2/refs/heads/main/DALL%C2%B7E%202025-01-28%2017.59.41%20-%20A%20Pixar-style%203D%20animated%20logo%20for%20'Data%20Science'.%20The%20design%20should%20be%20playful%20and%20cinematic%2C%20featuring%20a%20glowing%20AI-inspired%20brain%2C%20interconnected%20d.webp" alt="Logo" class="logo"></a>
+      <img src="https://raw.githubusercontent.com/RaviChandraTalluri/Portfoliowebsite2/refs/heads/main/DALL%C2%B7E%202025-01-28%2017.59.41%20-%20A%20Pixar-style%203D%20animated%20logo%20for%20'Data%20Science'.%20The%20design%20should%20be%20playful%20and%20cinematic%2C%20featuring%20a%20glowing%20AI-inspired%20brain%2C%20interconnected%20d.webp" alt="Aspirant Data Engineer Logo" class="w-12">
     </div>
     <div class="nav-links">
       <a href="#about">About</a>
       <a href="#skills">Skills</a>
       <a href="#projects">Projects</a>
-      <a href="#experience">Experience</a>
       <a href="#certifications">Certifications</a>
+      <a href="#experience">Experience</a>
       <a href="#contact">Contact</a>
     </div>
   </nav>
 
   <div class="content">
     <!-- Hero Section -->
-    <section class="hero-section">
-      <img src="https://raw.githubusercontent.com/RaviChandraTalluri/Portfoliowebsite2/refs/heads/main/DALL%C2%B7E%202025-01-28%2017.59.41%20-%20A%20Pixar-style%203D%20animated%20logo%20for%20'Data%20Science'.%20The%20design%20should%20be%20playful%20and%20cinematic%2C%20featuring%20a%20glowing%20AI-inspired%20brain%2C%20interconnected%20d.webp" alt="Logo" class="logo">
-      <h1 class="text-6xl font-extrabold">Lakshmi Ravi Chandra Talluri</h1>
-      <p class="mt-4 text-xl font-light">Data Engineer | Analyst | Databricks Certified</p>
-      <p class="mt-2 text-lg max-w-2xl mx-auto">Expert in designing, building, and optimizing scalable data pipelines and real-time processing systems. Passionate about leveraging data for operational excellence.</p>
-      <a href="#contact" class="cta-button mt-6">Get in Touch</a>
+    <section class="hero-section text-center text-white">
+      <h1 class="text-5xl font-bold">Lakshmi Ravi Chandra Talluri</h1>
+      <p class="mt-4 text-xl">Showcasing my projects and skills</p>
     </section>
 
     <!-- About Section -->
@@ -199,7 +226,13 @@
       <div class="section-header">
         <h2>About Me</h2>
       </div>
-      <p class="text-center max-w-4xl mx-auto">I am a skilled Data Engineer with hands-on experience in real-time data pipelines, big data technologies, and cloud platforms. With a strong academic background, I excel at creating data-driven solutions to complex challenges. My certifications and expertise in Databricks, Apache Spark, and Confluent Kafka demonstrate my ability to handle data at scale.</p>
+      <p class="text-center">
+        I am a passionate data engineer with extensive experience in building scalable data pipelines and optimizing data workflows. 
+        My expertise includes working with Databricks to process large datasets efficiently. I am proficient in using Apache Spark 
+        for big data processing and have a strong command of SQL for data manipulation and analysis. I am skilled in designing 
+        ETL processes and have hands-on experience with data warehousing solutions. My knowledge extends to cloud platforms like 
+        AWS and Azure, where I have implemented data solutions that enhance business intelligence and decision-making capabilities.
+      </p>
     </section>
 
     <!-- Skills Section -->
@@ -207,23 +240,71 @@
       <div class="section-header">
         <h2>Skills</h2>
       </div>
-      <div class="container mx-auto">
-        <div class="skill-item">
-          <span class="skill-title"><i class="fas fa-code"></i> Python</span>
-          <div class="skill-bar"><span style="width: 90%;"></span></div>
+      <div class="max-w-2xl mx-auto">
+        <div class="skill-item mb-4">
+          <div class="flex justify-between">
+            <span class="skill-title font-bold">Python</span>
+            <span class="skill-level">90%</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 90%;"></div>
+          </div>
         </div>
-        <div class="skill-item">
-          <span class="skill-title"><i class="fas fa-database"></i> SQL</span>
-          <div class="skill-bar"><span style="width: 85%;"></span></div>
+        <div class="skill-item mb-4">
+          <div class="flex justify-between">
+            <span class="skill-title font-bold">SQL</span>
+            <span class="skill-level">85%</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 85%;"></div>
+          </div>
         </div>
-        <div class="skill-item">
-          <span class="skill-title"><i class="fas fa-chart-bar"></i> Apache Spark</span>
-          <div class="skill-bar"><span style="width: 80%;"></span></div>
+        <div class="skill-item mb-4">
+          <div class="flex justify-between">
+            <span class="skill-title font-bold">Apache Spark</span>
+            <span class="skill-level">80%</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 80%;"></div>
+          </div>
         </div>
-        <div class="skill-item">
-          <span class="skill-title"><i class="fas fa-chart-pie"></i> Tableau</span>
-          <div class="skill-bar"><span style="width: 75%;"></span></div>
+        <div class="skill-item mb-4">
+          <div class="flex justify-between">
+            <span class="skill-title font-bold">ETL Processes</span>
+            <span class="skill-level">75%</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 75%;"></div>
+          </div>
         </div>
+        <div class="skill-item mb-4">
+          <div class="flex justify-between">
+            <span class="skill-title font-bold">Data Warehousing</span>
+            <span class="skill-level">70%</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 70%;"></div>
+          </div>
+        </div>
+        <div class="skill-item mb-4">
+          <div class="flex justify-between">
+            <span class="skill-title font-bold">AWS</span>
+            <span class="skill-level">65%</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 65%;"></div>
+          </div>
+        </div>
+        <div class="skill-item mb-4">
+          <div class="flex justify-between">
+            <span class="skill-title font-bold">Azure</span>
+            <span class="skill-level">60%</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 60%;"></div>
+          </div>
+        </div>
+        <!-- Add more skills as needed -->
       </div>
     </section>
 
@@ -232,48 +313,27 @@
       <div class="section-header">
         <h2>Projects</h2>
       </div>
-      <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="card p-6">
-          <img src="https://files.oaiusercontent.com/file-PBEGe6FGubaDsqQLsrQQE1?se=2025-01-28T23%3A39%3A05Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D5dca20a0-94e9-42d0-a11e-4ce0d6731a2c.webp&sig=YMvAjlYBeVm0fLxABJ8PmspI6vyo0sfKZcdsuXSH9O0%3D" alt="Real-Time Data Pipelines" class="w-full h-48 object-cover">
-          <h3 class="text-xl font-bold mt-4">Real-Time Data Pipelines</h3>
-          <p class="text-gray-600 mt-2">Developed real-time data pipelines in Databricks to handle high-velocity data streams efficiently.</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="project-card p-6">
+          <a href="project1.html">
+            <img src="https://raw.githubusercontent.com/RaviChandraTalluri/Portfoliowebsite2/refs/heads/main/DALL%C2%B7E%202025-01-28%2019.56.11%20-%20A%20visually%20appealing%20custom%20illustration%20of%20a%20modern%20data%20pipeline.%20The%20design%20includes%20interconnected%20data%20streams%20flowing%20between%20databases%2C%20cloud%20s.webp" alt="Real-Time Data Pipelines" class="w-full h-48 object-cover">
+            <h3 class="text-xl font-bold mt-4">Real-Time Data Pipelines</h3>
+            <p class="text-gray-600 mt-2">Developed real-time data pipelines in Databricks to handle high-velocity data streams efficiently.</p>
+          </a>
         </div>
-        <div class="card p-6">
-          <img src="https://github.com/RaviChandraTalluri/Portfoliowebsite2/blob/main/A_futuristic_dashboard_showcasing_inventory_optimi.png?raw=true" alt="Customer Satisfaction Analysis" class="w-full h-48 object-cover">
-          <h3 class="text-xl font-bold mt-4">Customer Satisfaction Analysis</h3>
-          <p class="text-gray-600 mt-2">Built machine learning models to analyze customer satisfaction and improve retention strategies.</p>
+        <div class="project-card p-6">
+          <a href="project2.html">
+            <img src="https://github.com/RaviChandraTalluri/Portfoliowebsite2/blob/main/A_futuristic_dashboard_showcasing_inventory_optimi.png?raw=true" alt="Customer Satisfaction Analysis" class="w-full h-48 object-cover">
+            <h3 class="text-xl font-bold mt-4">Customer Satisfaction Analysis</h3>
+            <p class="text-gray-600 mt-2">Built machine learning models to analyze customer satisfaction and improve retention strategies.</p>
+          </a>
         </div>
-        <div class="card p-6">
-          <img src="https://github.com/RaviChandraTalluri/Portfoliowebsite2/blob/main/A_futuristic_dashboard_for_demand_forecasting_in_a.png?raw=true" alt="Demand Forecasting System" class="w-full h-48 object-cover">
-          <h3 class="text-xl font-bold mt-4">Demand Forecasting System</h3>
-          <p class="text-gray-600 mt-2">Implemented ARIMA models to predict inventory requirements, reducing stockouts by 30%.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience" class="section">
-      <div class="section-header">
-        <h2>Experience</h2>
-      </div>
-      <div class="container mx-auto space-y-6">
-        <div class="card p-6">
-          <h3 class="text-xl font-bold">Data Engineer, Alephys</h3>
-          <p class="text-sm text-gray-500">July 2024 - Present | Houston, Texas</p>
-          <ul class="list-disc ml-4 mt-2 text-gray-600">
-            <li>Developed real-time data pipelines using Databricks and Delta Live Tables.</li>
-            <li>Optimized performance with partitioning, indexing, and caching for large datasets.</li>
-            <li>Integrated Confluent Kafka with Databricks for real-time streaming.</li>
-          </ul>
-        </div>
-        <div class="card p-6">
-          <h3 class="text-xl font-bold">Data Engineer Intern, Nuor</h3>
-          <p class="text-sm text-gray-500">April 2021 - June 2021 | Hyderabad, India</p>
-          <ul class="list-disc ml-4 mt-2 text-gray-600">
-            <li>Developed data pipelines in Databricks for ETL processes.</li>
-            <li>Led Cloudera Manager installation and Hadoop migration projects.</li>
-            <li>Built Tableau dashboards using advanced analytics techniques.</li>
-          </ul>
+        <div class="project-card p-6">
+          <a href="project3.html">
+            <img src="https://github.com/RaviChandraTalluri/Portfoliowebsite2/blob/main/A_futuristic_dashboard_for_demand_forecasting_in_a.png?raw=true" alt="Demand Forecasting System" class="w-full h-48 object-cover">
+            <h3 class="text-xl font-bold mt-4">Demand Forecasting System</h3>
+            <p class="text-gray-600 mt-2">Implemented ARIMA models to predict inventory requirements, reducing stockouts by 30%.</p>
+          </a>
         </div>
       </div>
     </section>
@@ -283,27 +343,67 @@
       <div class="section-header">
         <h2>Certifications</h2>
       </div>
-      <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div class="card p-6">
-          <img src="https://github.com/RaviChandraTalluri/Portfoliowebsite2/blob/main/Databricks%20Badge.png?raw=true">
-          <h3 class="text-xl font-bold mt-4">Databricks Certified Data Engineer Professional</h3>
-          <p class="text-gray-600">Valid: Sep 2024 - Sep 2026</p>
+          <a href="certification.html">
+            <img src="https://github.com/RaviChandraTalluri/Portfoliowebsite2/blob/main/Databricks%20Badge.png?raw=true" alt="Databricks Certified Data Engineer Professional">
+            <h3 class="text-xl font-bold mt-4">Databricks Certified Data Engineer Professional</h3>
+            <p class="text-gray-600">Valid: Sep 2024 - Sep 2026</p>
+          </a>
         </div>
+        <!-- Add more certifications as needed -->
+      </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section">
+      <div class="section-header">
+        <h2>Experience</h2>
+      </div>
+      <div class="experience-item">
+        <h3>Alephys, Houston, Texas</h3>
+        <p>Data Engineer | July 2024 - Present</p>
+        <ul>
+          <li>Developed and optimized scalable real-time data pipelines in Databricks using Delta Live Tables and Autoloader, achieving a 20% improvement in processing throughput to support e-commerce analytics.</li>
+          <li>Implemented ELT processes to streamline the transformation and loading of datasets into BigQuery, enhancing query performance for business intelligence by 21%.</li>
+          <li>Architected performance improvements using partitioning, indexing, and caching, ensuring compliance with security protocols and improving query efficiency by 30%.</li>
+          <li>Designed and analyzed large structured and unstructured datasets, using Apache Flink and Apache Hadoop to process high-volume data in real time.</li>
+          <li>Streamlined data integration workflows using AWS services, including EC2 for scalable compute power, S3 for secure and efficient data storage, Lambda for event-driven automation, Glue for ETL orchestration, and Athena for serverless querying, ensuring seamless data processing and accessibility.</li>
+          <li>Streamlined workflows through Bitbucket for version control, Autosys for job scheduling, and Jenkins for CI/CD pipelines, reducing deployment times by 25%.</li>
+          <li>Devised anomaly detection frameworks leveraging Python's SciPy and Statsmodels libraries to proactively identify inconsistencies in grant allocations, reducing errors by 30%.</li>
+          <li>Installed and secured the Confluent Kafka platform on-premises, implementing SASL_SSL encryption for secure communication and creating partitioned Kafka topics to optimize data distribution.</li>
+          <li>Automated ad hoc reporting requests with SQL and Python, delivering accurate insights with a 10% improvement in accuracy and significantly reducing response times.</li>
+          <li>Managed authentication using Kerberos by creating keytabs in LDAP nodes and integrating them into the on-prem Kafka cluster, ensuring robust security for data offsets and streaming operations.</li>
+          <li>Collaborated with data scientists to integrate machine learning models into automated workflows, resolving moderately complex data issues through applied expertise.</li>
+        </ul>
+      </div>
+      <div class="experience-item">
+        <h3>Nuor, Hyderabad, India</h3>
+        <p>Data Engineer Intern | April 2021 – June 2021</p>
+        <ul>
+          <li>Designed and developed notebooks in Databricks using Python and SQL for efficient data extraction, transformation, and loading (ETL).</li>
+          <li>Led a team of 5 in the installation of Cloudera Manager, upgrading to the latest version to enhance system performance and scalability.</li>
+          <li>Built customized dashboards with advanced Tableau features like calculated fields, LOD (Level of Detail) expressions, and parameter-driven views, offering tailored insights for Business.</li>
+          <li>Designed and automated advanced Tableau dashboards using Level of Detail (LOD) expressions, calculated fields, and dynamic parameters, enabling stakeholders to pull actionable insights effortlessly. This streamlined reporting process by reducing manual effort by 30% and ensuring updates could be generated in under 5 minutes with minimal intervention.</li>
+        </ul>
       </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="section bg-white">
+    <section id="contact" class="section">
       <div class="section-header">
         <h2>Contact Me</h2>
       </div>
-      <div class="max-w-lg mx-auto mt-8">
-        <form action="#" method="POST" class="contact-form">
-          <input type="text" name="name" placeholder="Your Name" class="w-full p-3 border rounded mb-4">
-          <input type="email" name="email" placeholder="Your Email" class="w-full p-3 border rounded mb-4">
-          <textarea name="message" placeholder="Your Message" class="w-full p-3 border rounded mb-4"></textarea>
-          <button type="submit" class="cta-button w-full">Send Message</button>
-        </form>
+      <div class="text-center">
+        <p class="text-lg">Feel free to reach out to me via LinkedIn or email:</p>
+        <div class="flex justify-center mt-4">
+          <a href="https://www.linkedin.com/in/ravi-chandra-t-2426191a0/" target="_blank" class="mx-4 text-blue-600 hover:text-blue-800">
+            <i class="fab fa-linkedin fa-2x"></i>
+          </a>
+          <a href="mailto: ravichandratalluri29@gmail.com" class="mx-4 text-red-600 hover:text-red-800">
+            <i class="fas fa-envelope fa-2x"></i>
+          </a>
+        </div>
       </div>
     </section>
   </div>
@@ -312,5 +412,25 @@
   <footer class="bg-black text-white text-center py-6">
     <p>&copy; 2025 Lakshmi Ravi Chandra Talluri. All rights reserved.</p>
   </footer>
+
+  <script>
+    function openModal(modalId) {
+      document.getElementById(modalId).style.display = "block";
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = "none";
+    }
+
+    // Close the modal when clicking outside of it
+    window.onclick = function(event) {
+      const modals = document.getElementsByClassName('modal');
+      for (let i = 0; i < modals.length; i++) {
+        if (event.target == modals[i]) {
+          modals[i].style.display = "none";
+        }
+      }
+    }
+  </script>
 </body>
 </html>

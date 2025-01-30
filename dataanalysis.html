@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Analysis Tool | Lakshmi Ravi Chandra Talluri</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .analysis-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+        .result-container {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .visualization {
+            width: 100%;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-black text-white p-4">
+        <div class="container mx-auto">
+            <a href="index.html" class="text-xl font-bold">← Back to Portfolio</a>
+        </div>
+    </nav>
+
+    <div class="analysis-container">
+        <h1 class="text-3xl font-bold mb-6">Data Analysis Tool</h1>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <form id="uploadForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Upload your dataset (CSV file)</label>
+                    <input type="file" accept=".csv" id="dataFile" class="mt-1 block w-full" required>
+                </div>
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Analyze Data
+                </button>
+            </form>
+        </div>
+
+        <div id="results" class="space-y-6 mt-8"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://54.172.107.4:8000';
+
+        // Add this function to test server connection
+        async function testServer() {
+            try {
+                const response = await fetch(`${API_URL}/test`);
+                if (!response.ok) throw new Error('Server not responding');
+                const data = await response.json();
+                console.log('Server status:', data.status);
+            } catch (error) {
+                console.error('Server connection error:', error);
+                alert('Cannot connect to server. Please try again later.');
+            }
+        }
+
+        // Call this when page loads
+        document.addEventListener('DOMContentLoaded', testServer);
+
+        // Update your fetch URL to use the remote server
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const fileInput = document.getElementById('dataFile');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select a file');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch(`${API_URL}/analyze`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Analysis failed');
+                }
+
+                const result = await response.json();
+                displayResults(result);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred during analysis. Please try again later.');
+            }
+        });
+
+        function displayResults(results) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = ''; // Clear previous results
+
+            // Add each visualization and insight
+            for (const section of results) {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'result-container';
+                
+                // Add title
+                const title = document.createElement('h2');
+                title.className = 'text-xl font-bold mb-4';
+                title.textContent = section.title;
+                sectionDiv.appendChild(title);
+
+                // Add visualization if present
+                if (section.visualization) {
+                    const img = document.createElement('img');
+                    img.src = `data:image/png;base64,${section.visualization}`;
+                    img.className = 'visualization';
+                    sectionDiv.appendChild(img);
+                }
+
+                // Add insights
+                if (section.insights) {
+                    const insights = document.createElement('div');
+                    insights.className = 'mt-4';
+                    insights.innerHTML = section.insights.join('<br>');
+                    sectionDiv.appendChild(insights);
+                }
+
+                resultsDiv.appendChild(sectionDiv);
+            }
+        }
+    </script>
+</body>
+</html> 

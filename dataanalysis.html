@@ -3,147 +3,306 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Analysis Tool | Lakshmi Ravi Chandra Talluri</title>
+    <title>Data Analysis Dashboard | Lakshmi Ravi Chandra Talluri</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        .analysis-container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 1rem;
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
         }
-        .result-container {
-            margin-top: 2rem;
-            padding: 1rem;
-            border-radius: 8px;
-            background-color: white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        .result-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            height: 100%;
+        }
+        .result-card:hover {
+            transform: translateY(-5px);
         }
         .visualization {
             width: 100%;
+            border-radius: 8px;
             margin-top: 1rem;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .insights-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .insights-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .insights-list li:last-child {
+            border-bottom: none;
         }
     </style>
 </head>
-<body class="bg-gray-100">
-    <nav class="bg-black text-white p-4">
-        <div class="container mx-auto">
-            <a href="index.html" class="text-xl font-bold">← Back to Portfolio</a>
+<body class="bg-gray-50">
+    <nav class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-xl font-bold flex items-center">
+                <i class="fas fa-chart-line mr-2"></i>
+                Data Analysis Dashboard
+            </a>
+            <a href="index.html" class="px-4 py-2 bg-white text-purple-600 rounded-lg hover:bg-gray-100">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Portfolio
+            </a>
         </div>
     </nav>
 
-    <div class="analysis-container">
-        <h1 class="text-3xl font-bold mb-6">Data Analysis Tool</h1>
-        
-        <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="dashboard-container">
+        <!-- Upload Section -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-bold mb-4">Data Analysis Tool</h2>
             <form id="uploadForm" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Upload your dataset (CSV file)</label>
-                    <input type="file" accept=".csv" id="dataFile" class="mt-1 block w-full" required>
+                <div class="flex items-center space-x-4">
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-file-upload mr-2"></i>Upload your dataset
+                        </label>
+                        <input type="file" accept=".csv" id="dataFile" 
+                               class="w-full p-2 border border-gray-300 rounded-lg" required>
+                    </div>
+                    <button type="submit" 
+                            class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-lg hover:opacity-90 flex items-center">
+                        <i class="fas fa-analytics mr-2"></i>
+                        Analyze Data
+                    </button>
                 </div>
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                    Analyze Data
-                </button>
             </form>
         </div>
 
-        <div id="results" class="space-y-6 mt-8"></div>
+        <!-- Quick Stats Section -->
+        <div id="quickStats" class="stats-grid mb-8 hidden">
+            <div class="stat-card">
+                <i class="fas fa-table text-3xl mb-2"></i>
+                <h3 class="text-lg font-semibold">Total Rows</h3>
+                <p id="totalRows" class="text-2xl font-bold">-</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-columns text-3xl mb-2"></i>
+                <h3 class="text-lg font-semibold">Total Columns</h3>
+                <p id="totalColumns" class="text-2xl font-bold">-</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-check-circle text-3xl mb-2"></i>
+                <h3 class="text-lg font-semibold">Data Quality</h3>
+                <p id="dataQuality" class="text-2xl font-bold">-</p>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
     </div>
 
     <script>
+        // Update API URL to use the correct server address
         const API_URL = 'http://54.172.107.4:8000';
-
-        // Add this function to test server connection
-        async function testServer() {
+        
+        // Add this function to test API connectivity
+        async function testAPI() {
             try {
-                const response = await fetch(`${API_URL}/test`, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    mode: 'cors'
-                });
-                
-                if (!response.ok) throw new Error('Server not responding');
+                const response = await fetch(`${API_URL}/test-analysis`);
                 const data = await response.json();
-                console.log('Server status:', data.status);
+                console.log('API Test Response:', data);
+                return true;
             } catch (error) {
-                console.error('Server connection error:', error);
-                alert('Cannot connect to server. Please try again later.');
+                console.error('API Test Failed:', error);
+                showError('API Connection Failed', `Unable to connect to ${API_URL}. Please check if the server is running.`);
+                return false;
             }
         }
 
-        // Call this when page loads
-        document.addEventListener('DOMContentLoaded', testServer);
+        // Test API on page load
+        document.addEventListener('DOMContentLoaded', testAPI);
 
-        // Update your fetch URL to use the remote server
         document.getElementById('uploadForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            // Clear previous results
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('quickStats').classList.add('hidden');
             
             const fileInput = document.getElementById('dataFile');
             const file = fileInput.files[0];
             
             if (!file) {
-                alert('Please select a file');
+                showError('Please select a file');
                 return;
             }
 
+            // Validate file type
+            if (!file.name.toLowerCase().endsWith('.csv')) {
+                showError('Invalid file type', 'Please upload a CSV file');
+                return;
+            }
+
+            const overlay = showLoading();
             const formData = new FormData();
             formData.append('file', file);
 
             try {
+                // Log request details
+                console.log('Uploading file:', file.name);
+                
                 const response = await fetch(`${API_URL}/analyze`, {
                     method: 'POST',
                     body: formData,
                     mode: 'cors'
                 });
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Analysis failed');
+                // Log response details
+                console.log('Response status:', response.status);
+                const responseText = await response.text();
+                console.log('Raw response:', responseText);
+
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (e) {
+                    console.error('JSON Parse Error:', e);
+                    throw new Error('Invalid response from server');
                 }
 
-                const result = await response.json();
-                displayResults(result);
+                if (!response.ok) {
+                    throw new Error(data.error || 'Analysis failed');
+                }
+
+                if (!Array.isArray(data)) {
+                    console.error('Invalid response format:', data);
+                    throw new Error('Invalid response format from server');
+                }
+
+                console.log('Analysis results:', data);
+                displayResults(data);
+                
             } catch (error) {
-                console.error('Error:', error);
-                alert(`An error occurred during analysis: ${error.message}`);
+                console.error('Analysis error:', error);
+                showError('Analysis Failed', error.message);
+            } finally {
+                overlay.remove();
             }
         });
 
         function displayResults(results) {
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = ''; // Clear previous results
+            if (!results || !Array.isArray(results) || results.length === 0) {
+                showError('No results available');
+                return;
+            }
 
-            // Add each visualization and insight
-            for (const section of results) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            
+            // Show quick stats
+            const quickStats = document.getElementById('quickStats');
+            quickStats.classList.remove('hidden');
+            
+            // Process each result section
+            results.forEach((section, index) => {
+                console.log(`Processing section ${index}:`, section);
+                
                 const sectionDiv = document.createElement('div');
-                sectionDiv.className = 'result-container';
+                sectionDiv.className = 'result-card p-6';
                 
                 // Add title
-                const title = document.createElement('h2');
-                title.className = 'text-xl font-bold mb-4';
-                title.textContent = section.title;
-                sectionDiv.appendChild(title);
-
+                sectionDiv.innerHTML += `
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-chart-bar text-purple-600 text-xl mr-2"></i>
+                        <h2 class="text-xl font-bold">${section.title || 'Analysis Result'}</h2>
+                    </div>
+                `;
+                
                 // Add visualization if present
                 if (section.visualization) {
                     const img = document.createElement('img');
                     img.src = `data:image/png;base64,${section.visualization}`;
-                    img.className = 'visualization';
+                    img.className = 'visualization mb-4';
+                    img.onerror = () => {
+                        console.error(`Failed to load visualization for section ${index}`);
+                        img.style.display = 'none';
+                    };
                     sectionDiv.appendChild(img);
                 }
-
+                
                 // Add insights
-                if (section.insights) {
-                    const insights = document.createElement('div');
-                    insights.className = 'mt-4';
-                    insights.innerHTML = section.insights.join('<br>');
-                    sectionDiv.appendChild(insights);
+                if (section.insights && section.insights.length > 0) {
+                    const insightsList = document.createElement('ul');
+                    insightsList.className = 'insights-list mt-4';
+                    section.insights.forEach(insight => {
+                        insightsList.innerHTML += `
+                            <li class="py-2">
+                                <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+                                ${insight}
+                            </li>
+                        `;
+                    });
+                    sectionDiv.appendChild(insightsList);
                 }
-
+                
                 resultsDiv.appendChild(sectionDiv);
+            });
+
+            // Update quick stats
+            if (results[0] && results[0].insights) {
+                const firstInsight = results[0].insights[0];
+                const rowsMatch = firstInsight.match(/(\d+)\s+rows/);
+                const colsMatch = firstInsight.match(/(\d+)\s+columns/);
+                
+                if (rowsMatch) document.getElementById('totalRows').textContent = rowsMatch[1];
+                if (colsMatch) document.getElementById('totalColumns').textContent = colsMatch[1];
+                document.getElementById('dataQuality').textContent = 'Good';
             }
+        }
+
+        function showError(title, message = '') {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <div class="col-span-2 bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg">
+                    <h3 class="font-bold mb-2">${title}</h3>
+                    ${message ? `<p>${message}</p>` : ''}
+                </div>
+            `;
+        }
+
+        // Add loading indicator
+        function showLoading() {
+            const overlay = document.createElement('div');
+            overlay.className = 'loading-overlay';
+            overlay.innerHTML = `
+                <div class="text-center">
+                    <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mb-4"></div>
+                    <p class="text-lg text-gray-600">Analyzing your data...</p>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            return overlay;
         }
     </script>
 </body>

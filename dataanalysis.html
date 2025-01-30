@@ -55,7 +55,15 @@
         // Add this function to test server connection
         async function testServer() {
             try {
-                const response = await fetch(`${API_URL}/test`);
+                const response = await fetch(`${API_URL}/test`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    mode: 'cors'
+                });
+                
                 if (!response.ok) throw new Error('Server not responding');
                 const data = await response.json();
                 console.log('Server status:', data.status);
@@ -86,18 +94,20 @@
             try {
                 const response = await fetch(`${API_URL}/analyze`, {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    mode: 'cors'
                 });
 
                 if (!response.ok) {
-                    throw new Error('Analysis failed');
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Analysis failed');
                 }
 
                 const result = await response.json();
                 displayResults(result);
             } catch (error) {
                 console.error('Error:', error);
-                alert('An error occurred during analysis. Please try again later.');
+                alert(`An error occurred during analysis: ${error.message}`);
             }
         });
 

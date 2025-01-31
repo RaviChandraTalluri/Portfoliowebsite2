@@ -123,30 +123,55 @@
     </div>
 
     <script>
-        // Update API URL to use the correct server address
+        // Update API URL to use the correct endpoint
         const API_URL = 'http://54.172.107.4:8000';
         
-        // Add this function to test API connectivity
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('Testing API connection...');
+            await testAPI();
+        });
+
         async function testAPI() {
             try {
-                const response = await fetch(`${API_URL}/test-analysis`);
+                console.log('Testing API connection to:', `${API_URL}/health`);
+                const response = await fetch(`${API_URL}/health`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    mode: 'cors'
+                });
+                
+                console.log('API response status:', response.status);
                 const data = await response.json();
-                console.log('API Test Response:', data);
-                return true;
+                console.log('API health check response:', data);
+                
+                if (data.status === 'healthy') {
+                    console.log('API connection successful');
+                    return true;
+                } else {
+                    throw new Error(`Server not healthy: ${JSON.stringify(data)}`);
+                }
             } catch (error) {
-                console.error('API Test Failed:', error);
-                showError('API Connection Failed', `Unable to connect to ${API_URL}. Please check if the server is running.`);
+                console.error('API Connection Failed:', error);
+                showError('Connection Error', 
+                    `Unable to connect to the analysis server (${API_URL}).<br>
+                    Please ensure the server is running and accessible.<br>
+                    Error: ${error.message}`
+                );
                 return false;
             }
         }
 
-        // Test API on page load
-        document.addEventListener('DOMContentLoaded', testAPI);
-
         document.getElementById('uploadForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // Clear previous results
+            const isConnected = await testAPI();
+            if (!isConnected) {
+                return;
+            }
+            
             document.getElementById('results').innerHTML = '';
             document.getElementById('quickStats').classList.add('hidden');
             
@@ -158,7 +183,6 @@
                 return;
             }
 
-            // Validate file type
             if (!file.name.toLowerCase().endsWith('.csv')) {
                 showError('Invalid file type', 'Please upload a CSV file');
                 return;
@@ -169,16 +193,17 @@
             formData.append('file', file);
 
             try {
-                // Log request details
                 console.log('Uploading file:', file.name);
                 
                 const response = await fetch(`${API_URL}/analyze`, {
                     method: 'POST',
                     body: formData,
-                    mode: 'cors'
+                    mode: 'cors',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
                 });
 
-                // Log response details
                 console.log('Response status:', response.status);
                 const responseText = await response.text();
                 console.log('Raw response:', responseText);
@@ -192,7 +217,7 @@
                 }
 
                 if (!response.ok) {
-                    throw new Error(data.error || 'Analysis failed');
+                    throw new Error(data.error || `Server error: ${response.status}`);
                 }
 
                 if (!Array.isArray(data)) {
@@ -220,18 +245,15 @@
             const resultsDiv = document.getElementById('results');
             resultsDiv.innerHTML = '';
             
-            // Show quick stats
             const quickStats = document.getElementById('quickStats');
             quickStats.classList.remove('hidden');
             
-            // Process each result section
             results.forEach((section, index) => {
                 console.log(`Processing section ${index}:`, section);
                 
                 const sectionDiv = document.createElement('div');
                 sectionDiv.className = 'result-card p-6';
                 
-                // Add title
                 sectionDiv.innerHTML += `
                     <div class="flex items-center mb-4">
                         <i class="fas fa-chart-bar text-purple-600 text-xl mr-2"></i>
@@ -239,7 +261,6 @@
                     </div>
                 `;
                 
-                // Add visualization if present
                 if (section.visualization) {
                     const img = document.createElement('img');
                     img.src = `data:image/png;base64,${section.visualization}`;
@@ -251,7 +272,6 @@
                     sectionDiv.appendChild(img);
                 }
                 
-                // Add insights
                 if (section.insights && section.insights.length > 0) {
                     const insightsList = document.createElement('ul');
                     insightsList.className = 'insights-list mt-4';
@@ -269,7 +289,6 @@
                 resultsDiv.appendChild(sectionDiv);
             });
 
-            // Update quick stats
             if (results[0] && results[0].insights) {
                 const firstInsight = results[0].insights[0];
                 const rowsMatch = firstInsight.match(/(\d+)\s+rows/);
@@ -291,7 +310,6 @@
             `;
         }
 
-        // Add loading indicator
         function showLoading() {
             const overlay = document.createElement('div');
             overlay.className = 'loading-overlay';

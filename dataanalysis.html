@@ -123,7 +123,7 @@
     </div>
 
     <script>
-        // Update API URL to use the deployed server
+        // Use simple HTTP for now
         const API_URL = 'http://3.145.108.142:5000';
         
         document.addEventListener('DOMContentLoaded', async () => {
@@ -141,20 +141,16 @@
                 const response = await fetch(`${API_URL}/test`, {
                     method: 'GET',
                     headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'Origin': window.location.origin
+                        'Accept': 'application/json'
                     },
                     mode: 'cors',
-                    credentials: 'omit',
-                    signal: AbortSignal.timeout(5000)
+                    credentials: 'same-origin'
                 });
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 
-                console.log('API response status:', response.status);
                 const data = await response.json();
                 console.log('API test response:', data);
                 
@@ -166,33 +162,26 @@
                 }
             } catch (error) {
                 console.error('API Connection Failed:', error);
-                const errorMessage = error.message === 'Failed to fetch' 
-                    ? 'Cannot reach the server. Please check if the server is running and accessible.'
-                    : error.message;
-                    
                 showError('Connection Error', 
                     `Unable to connect to the analysis server.<br>
                     Server URL: ${API_URL}<br>
-                    Error: ${errorMessage}<br>
+                    Error: ${error.message}<br>
                     <br>
-                    If this persists, please contact support.`
+                    Please check the server status and try again.`
                 );
                 return false;
             }
         }
 
-        // Update the analyze endpoint fetch configuration as well
         async function analyzeData(formData) {
             const response = await fetch(`${API_URL}/analyze`, {
                 method: 'POST',
                 body: formData,
                 mode: 'cors',
-                credentials: 'omit',
+                credentials: 'same-origin',
                 headers: {
-                    'Accept': 'application/json',
-                    'Origin': window.location.origin
-                },
-                signal: AbortSignal.timeout(30000)
+                    'Accept': 'application/json'
+                }
             });
             return response;
         }

@@ -123,8 +123,8 @@
     </div>
 
     <script>
-        // Update API URL to use the correct endpoint
-        const API_URL = 'http://54.172.107.4:8000';
+        // Update API URL to use the EC2 instance
+        const API_URL = 'http://3.145.108.142:5000';
         
         document.addEventListener('DOMContentLoaded', async () => {
             console.log('Testing API connection...');
@@ -133,8 +133,8 @@
 
         async function testAPI() {
             try {
-                console.log('Testing API connection to:', `${API_URL}/health`);
-                const response = await fetch(`${API_URL}/health`, {
+                console.log('Testing API connection to:', `${API_URL}/test`);
+                const response = await fetch(`${API_URL}/test`, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json',
@@ -145,13 +145,13 @@
                 
                 console.log('API response status:', response.status);
                 const data = await response.json();
-                console.log('API health check response:', data);
+                console.log('API test response:', data);
                 
-                if (data.status === 'healthy') {
+                if (data.status === 'Server is running') {
                     console.log('API connection successful');
                     return true;
                 } else {
-                    throw new Error(`Server not healthy: ${JSON.stringify(data)}`);
+                    throw new Error(`Server not responding as expected: ${JSON.stringify(data)}`);
                 }
             } catch (error) {
                 console.error('API Connection Failed:', error);

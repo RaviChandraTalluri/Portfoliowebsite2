@@ -123,7 +123,7 @@
     </div>
 
     <script>
-        // Use simple HTTP for now
+        // Use the full URL with port
         const API_URL = 'http://3.145.108.142:5000';
         
         document.addEventListener('DOMContentLoaded', async () => {
@@ -143,8 +143,7 @@
                     headers: {
                         'Accept': 'application/json'
                     },
-                    mode: 'cors',
-                    credentials: 'same-origin'
+                    mode: 'cors'
                 });
                 
                 if (!response.ok) {
@@ -178,7 +177,6 @@
                 method: 'POST',
                 body: formData,
                 mode: 'cors',
-                credentials: 'same-origin',
                 headers: {
                     'Accept': 'application/json'
                 }

@@ -27,10 +27,15 @@ from io import StringIO
 
 app = Flask(__name__, static_folder='static')
 
-# Simplify CORS configuration again but with specific origins
-CORS(app, origins=["http://localhost:5000", "http://3.145.108.142:5000", "https://3.145.108.142:5000"],
-     allow_credentials=True,
-     supports_credentials=True)
+# Update CORS configuration to allow all origins during testing
+CORS(app, resources={
+    r"/*": {
+        "origins": "*",
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization", "Accept", "Origin"],
+        "supports_credentials": True
+    }
+})
 
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
@@ -55,10 +60,9 @@ app.logger.info('API startup')
 # Simplify the after_request handler
 @app.after_request
 def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', request.headers.get('Origin', '*'))
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
-    response.headers.add('Access-Control-Allow-Headers', '*')
-    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
     return response
 
 # Update Redis configuration with fallback to in-memory storage

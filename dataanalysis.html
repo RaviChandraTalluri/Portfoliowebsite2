@@ -123,12 +123,17 @@
     </div>
 
     <script>
-        // Update API URL to use the EC2 instance
-        const API_URL = 'http://3.145.108.142:5000';
+        // Update API URL to be configurable and default to localhost for development
+        const API_URL = 'http://localhost:5000'; // Changed from hardcoded EC2 instance
         
         document.addEventListener('DOMContentLoaded', async () => {
             console.log('Testing API connection...');
-            await testAPI();
+            try {
+                await testAPI();
+            } catch (error) {
+                console.warn('Initial API test failed:', error);
+                // Continue loading the page even if initial test fails
+            }
         });
 
         async function testAPI() {
@@ -140,8 +145,14 @@
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
-                    mode: 'cors'
+                    mode: 'cors',
+                    // Add timeout to prevent long hanging requests
+                    signal: AbortSignal.timeout(5000)
                 });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 
                 console.log('API response status:', response.status);
                 const data = await response.json();
@@ -156,8 +167,9 @@
             } catch (error) {
                 console.error('API Connection Failed:', error);
                 showError('Connection Error', 
-                    `Unable to connect to the analysis server (${API_URL}).<br>
-                    Please ensure the server is running and accessible.<br>
+                    `Unable to connect to the analysis server.<br>
+                    Please ensure the server is running at ${API_URL}.<br>
+                    If you're running locally, make sure the Flask server is started.<br>
                     Error: ${error.message}`
                 );
                 return false;
@@ -167,32 +179,33 @@
         document.getElementById('uploadForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const isConnected = await testAPI();
-            if (!isConnected) {
-                return;
-            }
-            
-            document.getElementById('results').innerHTML = '';
-            document.getElementById('quickStats').classList.add('hidden');
-            
-            const fileInput = document.getElementById('dataFile');
-            const file = fileInput.files[0];
-            
-            if (!file) {
-                showError('Please select a file');
-                return;
-            }
-
-            if (!file.name.toLowerCase().endsWith('.csv')) {
-                showError('Invalid file type', 'Please upload a CSV file');
-                return;
-            }
-
+            // Show loading state immediately
             const overlay = showLoading();
-            const formData = new FormData();
-            formData.append('file', file);
-
+            
             try {
+                const isConnected = await testAPI();
+                if (!isConnected) {
+                    overlay.remove();
+                    return;
+                }
+                
+                document.getElementById('results').innerHTML = '';
+                document.getElementById('quickStats').classList.add('hidden');
+                
+                const fileInput = document.getElementById('dataFile');
+                const file = fileInput.files[0];
+                
+                if (!file) {
+                    throw new Error('Please select a file');
+                }
+
+                if (!file.name.toLowerCase().endsWith('.csv')) {
+                    throw new Error('Please upload a CSV file');
+                }
+
+                const formData = new FormData();
+                formData.append('file', file);
+
                 console.log('Uploading file:', file.name);
                 
                 const response = await fetch(`${API_URL}/analyze`, {
@@ -201,7 +214,9 @@
                     mode: 'cors',
                     headers: {
                         'Accept': 'application/json'
-                    }
+                    },
+                    // Add timeout for the analysis request
+                    signal: AbortSignal.timeout(30000) // 30 second timeout
                 });
 
                 console.log('Response status:', response.status);

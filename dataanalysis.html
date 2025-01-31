@@ -132,7 +132,6 @@
                 await testAPI();
             } catch (error) {
                 console.warn('Initial API test failed:', error);
-                // Continue loading the page even if initial test fails
             }
         });
 
@@ -143,10 +142,11 @@
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Origin': window.location.origin
                     },
                     mode: 'cors',
-                    // Add timeout to prevent long hanging requests
+                    credentials: 'omit',
                     signal: AbortSignal.timeout(5000)
                 });
                 
@@ -166,20 +166,40 @@
                 }
             } catch (error) {
                 console.error('API Connection Failed:', error);
+                const errorMessage = error.message === 'Failed to fetch' 
+                    ? 'Cannot reach the server. Please check if the server is running and accessible.'
+                    : error.message;
+                    
                 showError('Connection Error', 
                     `Unable to connect to the analysis server.<br>
-                    Please ensure the server is running at ${API_URL}.<br>
-                    If you're running locally, make sure the Flask server is started.<br>
-                    Error: ${error.message}`
+                    Server URL: ${API_URL}<br>
+                    Error: ${errorMessage}<br>
+                    <br>
+                    If this persists, please contact support.`
                 );
                 return false;
             }
         }
 
+        // Update the analyze endpoint fetch configuration as well
+        async function analyzeData(formData) {
+            const response = await fetch(`${API_URL}/analyze`, {
+                method: 'POST',
+                body: formData,
+                mode: 'cors',
+                credentials: 'omit',
+                headers: {
+                    'Accept': 'application/json',
+                    'Origin': window.location.origin
+                },
+                signal: AbortSignal.timeout(30000)
+            });
+            return response;
+        }
+
         document.getElementById('uploadForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // Show loading state immediately
             const overlay = showLoading();
             
             try {
@@ -208,17 +228,7 @@
 
                 console.log('Uploading file:', file.name);
                 
-                const response = await fetch(`${API_URL}/analyze`, {
-                    method: 'POST',
-                    body: formData,
-                    mode: 'cors',
-                    headers: {
-                        'Accept': 'application/json'
-                    },
-                    // Add timeout for the analysis request
-                    signal: AbortSignal.timeout(30000) // 30 second timeout
-                });
-
+                const response = await analyzeData(formData);
                 console.log('Response status:', response.status);
                 const responseText = await response.text();
                 console.log('Raw response:', responseText);

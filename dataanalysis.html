@@ -123,8 +123,8 @@
     </div>
 
     <script>
-        // Update API URL to be configurable and default to localhost for development
-        const API_URL = 'http://localhost:5000'; // Changed from hardcoded EC2 instance
+        // Update API URL to use the deployed server
+        const API_URL = 'http://3.145.108.142:5000';
         
         document.addEventListener('DOMContentLoaded', async () => {
             console.log('Testing API connection...');
